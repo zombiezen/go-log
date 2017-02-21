@@ -1,3 +1,9 @@
+// Copyright 2017 The Go Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// Sample application to demonstrate the log package.
+
 package main
 
 import (
@@ -10,9 +16,13 @@ import (
 
 var myLog = log.DefaultLogger()
 
-func main() {
+func init() {
 	ctx := context.Background()
 	logutil.Log(ctx, myLog, "Hello during package init!")
+}
+
+func main() {
+	ctx := context.Background()
 	initLog()
 	logutil.Log(ctx, myLog, "Hello after init!")
 }
