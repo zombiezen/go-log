@@ -49,9 +49,9 @@ func (l *atomicLogger) LogEnabled(ent Entry) bool {
 }
 
 func (l *atomicLogger) logger() Logger {
-	out := l.out.Load().(Logger)
+	out := l.out.Load()
 	if out == nil {
 		return fallback
 	}
-	return out
+	return out.(Logger)
 }
