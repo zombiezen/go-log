@@ -1,4 +1,4 @@
-# log package
+# `zombiezen.com/go/log`
 
 This repository is the concrete implementation of the design described in
 [my logging design doc].  It is intended as a proof-of-concept package; it will
