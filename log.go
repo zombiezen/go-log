@@ -13,23 +13,16 @@ import (
 
 // Logger is the interface that wraps the Log method.
 //
-// Log sends ent to the underlying log sink.  Each call will be sent to the
-// sink in the order that Log was called, but Log may not wait for
+// Log sends an Entry to the underlying log sink.  Each call will be sent
+// to the sink in the order that Log was called, but Log may not wait for
 // delivery to be acknowledged.  As such, Log should ignore any deadline
-// set on ctx.  Log must be safe to call from multiple goroutines.
+// set on the Context.  Log must be safe to call from multiple goroutines.
 //
-// LogEnabled returns false if an Entry, which may or may not have Msg
-// filled in, will be sent to the underlying log sink.  Implementations
-// must guarantee that calling Log is identical to the following:
-//
-//	ent := NewEntry(0, "")
-//	if logger.LogEnabled(ent) {
-//		ent.Msg = ...
-//		logger.Log(ctx, ent)
-//	}
+// LogEnabled returns false if Log will no-op for a particular Entry, which
+// may or may not have Msg filled in.
 type Logger interface {
-	Log(ctx context.Context, ent Entry)
-	LogEnabled(ent Entry) bool
+	Log(context.Context, Entry)
+	LogEnabled(Entry) bool
 }
 
 // Entry is a single log record.
