@@ -78,10 +78,13 @@ func TestWriter(t *testing.T) {
 func BenchmarkWriter(b *testing.B) {
 	ctx := context.Background()
 	buf := new(bytes.Buffer)
-	logger := New(buf, "", 0, nil)
+	logger := New(buf, "", LstdFlags, nil)
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
 		buf.Reset()
-		logger.Log(ctx, NewEntry(0, "hello, world"))
+		logger.Log(ctx, Entry{
+			Msg:  "Hello, World!",
+			Time: time.Now(),
+		})
 	}
 }

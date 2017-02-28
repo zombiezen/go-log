@@ -8,7 +8,6 @@ package log // import "zombiezen.com/go/log"
 
 import (
 	"context"
-	"runtime"
 	"time"
 )
 
@@ -48,22 +47,6 @@ type Entry struct {
 	// reported by runtime.Caller.
 	File string
 	Line int
-}
-
-// NewEntry returns a new entry with the time set to time.Now.
-// The argument skip is the number of stack frames to ascend to obtain
-// caller information, with 0 identifying the caller of NewEntry.
-func NewEntry(skip int, msg string) Entry {
-	now := time.Now()
-	ent := Entry{
-		Msg:  msg,
-		Time: now,
-	}
-	if _, file, line, ok := runtime.Caller(skip + 1); ok {
-		ent.File = file
-		ent.Line = line
-	}
-	return ent
 }
 
 // Append appends a formatted entry to a buffer.

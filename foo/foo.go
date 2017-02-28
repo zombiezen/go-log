@@ -11,20 +11,19 @@ import (
 	"os"
 
 	"zombiezen.com/go/log"
-	"zombiezen.com/go/log/logutil"
 )
 
 var myLog = log.Default()
 
 func init() {
 	ctx := context.Background()
-	logutil.Log(ctx, myLog, "Hello during package init!")
+	log.Infof(ctx, myLog, "Hello during package init!")
 }
 
 func main() {
 	ctx := context.Background()
 	initLog()
-	logutil.Log(ctx, myLog, "Hello after init!")
+	log.Infof(ctx, myLog, "Hello after init!")
 }
 
 func initLog() {
