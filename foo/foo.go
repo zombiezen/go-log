@@ -14,7 +14,7 @@ import (
 	"zombiezen.com/go/log/logutil"
 )
 
-var myLog = log.DefaultLogger()
+var myLog = log.Default()
 
 func init() {
 	ctx := context.Background()
@@ -29,5 +29,5 @@ func main() {
 
 func initLog() {
 	stderrLog := log.New(os.Stderr, "", log.LstdFlags|log.Lshortfile, nil)
-	log.SetDefaultLogger(stderrLog)
+	log.SetDefault(stderrLog)
 }

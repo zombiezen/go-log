@@ -18,11 +18,15 @@ var (
 	fallback = New(os.Stderr, "", LstdFlags, nil)
 )
 
-func DefaultLogger() Logger {
+// Default returns the global logger.
+// Until SetDefault is called, the returned Logger will send all
+// entries to stderr.
+func Default() Logger {
 	return &defaultLogger
 }
 
-func SetDefaultLogger(l Logger) {
+// SetDefault sets the global logger.  It can only be called once.
+func SetDefault(l Logger) {
 	ok := false
 	setDefaultLogger.Do(func() {
 		if l == nil {
