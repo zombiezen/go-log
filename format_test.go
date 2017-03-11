@@ -43,18 +43,28 @@ func TestLogf(t *testing.T) {
 				}
 			}
 		})
+		t.Run(test.name+"_disabled", func(t *testing.T) {
+			cl := captureLogger{disabled: true}
+			test.f(context.Background(), &cl, "%s", wantMsg)
+			if cl.called {
+				t.Error("called Log when Logger disabled")
+			}
+		})
 	}
 }
 
 type captureLogger struct {
-	e Entry
+	e        Entry
+	called   bool
+	disabled bool
 }
 
 func (cl *captureLogger) Log(_ context.Context, e Entry) {
 	cl.e = e
+	cl.called = true
 }
 
-func (cl *captureLogger) LogEnabled(Entry) bool { return true }
+func (cl *captureLogger) LogEnabled(Entry) bool { return !cl.disabled }
 
 func BenchmarkDiscardLogf(b *testing.B) {
 	ctx := context.Background()
