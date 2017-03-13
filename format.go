@@ -31,6 +31,8 @@ func logf(ctx context.Context, logger Logger, level Level, format string, args [
 		return
 	}
 	ent.Msg = fmt.Sprintf(format, args...)
-	// TODO: remove trailing newline, if any
+	if n := len(ent.Msg); n > 0 && ent.Msg[n-1] == '\n' {
+		ent.Msg = ent.Msg[:n-1]
+	}
 	logger.Log(ctx, ent)
 }

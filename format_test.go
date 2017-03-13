@@ -50,6 +50,13 @@ func TestLogf(t *testing.T) {
 				t.Error("called Log when Logger disabled")
 			}
 		})
+		t.Run(test.name+"_newline", func(t *testing.T) {
+			cl := captureLogger{}
+			test.f(context.Background(), &cl, "%s\n", wantMsg)
+			if cl.e.Msg != wantMsg {
+				t.Errorf("e.Msg = %q; want %q", cl.e.Msg, wantMsg)
+			}
+		})
 	}
 }
 
