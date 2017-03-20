@@ -30,6 +30,17 @@ func TestWriter(t *testing.T) {
 			want: "Hello, World!\n",
 		},
 		{
+			name:   "prefix no-header",
+			prefix: "///prefix|||",
+			entry: Entry{
+				Msg:  "Hello, World!",
+				Time: time.Date(2017, time.February, 17, 1, 2, 3, 456789000, time.UTC),
+				File: "foo/bar.go",
+				Line: 278,
+			},
+			want: "///prefix|||Hello, World!\n",
+		},
+		{
 			name: "entry message has trailing newline",
 			entry: Entry{
 				Msg:  "Hello, World!\n",

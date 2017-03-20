@@ -59,8 +59,8 @@ func New(w io.Writer, prefix string, flag int, errFunc func(context.Context, err
 func (w *Writer) Log(ctx context.Context, ent Entry) {
 	defer w.mu.Unlock()
 	w.mu.Lock()
-	w.buf = append(w.buf, w.prefix...)
-	w.buf = ent.Append(w.buf[:0], w.flag)
+	w.buf = append(w.buf[:0], w.prefix...)
+	w.buf = ent.Append(w.buf, w.flag)
 	w.buf = append(w.buf, '\n')
 	_, err := w.out.Write(w.buf)
 	if err != nil && w.errFunc != nil {
