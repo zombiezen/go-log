@@ -12,24 +12,21 @@ import (
 )
 
 func TestLogf(t *testing.T) {
-	tests := []struct {
-		name  string
-		f     func(context.Context, Logger, string, ...interface{})
-		level Level
-	}{
-		{"Info", Infof, Info},
-		{"Debug", Debugf, Debug},
+	tests := []Level{
+		Info,
+		Debug,
 	}
 	const wantMsg = "Hello, World!"
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
+	for _, level := range tests {
+		name := level.String()
+		t.Run(name, func(t *testing.T) {
 			cl := captureLogger{}
-			test.f(context.Background(), &cl, "%s", wantMsg)
+			Logf(context.Background(), &cl, level, "%s", wantMsg)
 			if cl.e.Msg != wantMsg {
 				t.Errorf("e.Msg = %q; want %q", cl.e.Msg, wantMsg)
 			}
-			if cl.e.Level != test.level {
-				t.Errorf("e.Level = %v; want %v", cl.e.Level, test.level)
+			if cl.e.Level != level {
+				t.Errorf("e.Level = %v; want %v", cl.e.Level, level)
 			}
 			if cl.e.Time.IsZero() {
 				t.Error("e.Time is zero")
@@ -43,16 +40,16 @@ func TestLogf(t *testing.T) {
 				}
 			}
 		})
-		t.Run(test.name+"_disabled", func(t *testing.T) {
+		t.Run(name+"_disabled", func(t *testing.T) {
 			cl := captureLogger{disabled: true}
-			test.f(context.Background(), &cl, "%s", wantMsg)
+			Logf(context.Background(), &cl, level, "%s", wantMsg)
 			if cl.called {
 				t.Error("called Log when Logger disabled")
 			}
 		})
-		t.Run(test.name+"_newline", func(t *testing.T) {
+		t.Run(name+"_newline", func(t *testing.T) {
 			cl := captureLogger{}
-			test.f(context.Background(), &cl, "%s\n", wantMsg)
+			Logf(context.Background(), &cl, level, "%s\n", wantMsg)
 			if cl.e.Msg != wantMsg {
 				t.Errorf("e.Msg = %q; want %q", cl.e.Msg, wantMsg)
 			}
@@ -77,7 +74,7 @@ func BenchmarkDiscardLogf(b *testing.B) {
 	ctx := context.Background()
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
-		Infof(ctx, Discard, "Hello, %v!", "World")
+		Logf(ctx, Discard, Info, "Hello, %v!", "World")
 	}
 }
 
@@ -88,6 +85,6 @@ func BenchmarkWriterLogf(b *testing.B) {
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
 		buf.Reset()
-		Infof(ctx, logger, "Hello, %v!", "World")
+		Logf(ctx, logger, Info, "Hello, %v!", "World")
 	}
 }

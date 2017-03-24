@@ -4,6 +4,8 @@
 
 // Sample application to demonstrate the log package.
 
+// +build ignore
+
 package main
 
 import (
@@ -13,17 +15,15 @@ import (
 	"zombiezen.com/go/log"
 )
 
-var myLog = log.Default()
-
 func init() {
 	ctx := context.Background()
-	log.Infof(ctx, myLog, "Hello during package init!")
+	log.Infof(ctx, "Hello during package init!")
 }
 
 func main() {
 	ctx := context.Background()
 	initLog()
-	log.Infof(ctx, myLog, "Hello after init!")
+	log.Infof(ctx, "Hello after init!")
 }
 
 func initLog() {

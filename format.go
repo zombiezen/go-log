@@ -11,14 +11,19 @@ import (
 	"time"
 )
 
-// Infof writes an info message to log.  Its arguments are handled in the manner of fmt.Sprintf.
-func Infof(ctx context.Context, logger Logger, format string, args ...interface{}) {
-	logf(ctx, logger, Info, format, args)
+// Infof writes an info message to the default Logger.  Its arguments are handled in the manner of fmt.Sprintf.
+func Infof(ctx context.Context, format string, args ...interface{}) {
+	logf(ctx, Default(), Info, format, args)
 }
 
-// Debugf writes a debug message to log.  Its arguments are handled in the manner of fmt.Sprintf.
-func Debugf(ctx context.Context, logger Logger, format string, args ...interface{}) {
-	logf(ctx, logger, Debug, format, args)
+// Debugf writes a debug message to the default Logger.  Its arguments are handled in the manner of fmt.Sprintf.
+func Debugf(ctx context.Context, format string, args ...interface{}) {
+	logf(ctx, Default(), Debug, format, args)
+}
+
+// Logf writes a message to a Logger.  Its arguments are handled in the manner of fmt.Sprintf.
+func Logf(ctx context.Context, logger Logger, level Level, format string, args ...interface{}) {
+	logf(ctx, logger, level, format, args)
 }
 
 func logf(ctx context.Context, logger Logger, level Level, format string, args []interface{}) {
