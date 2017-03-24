@@ -146,6 +146,8 @@ type Level int
 const (
 	Debug Level = -10 // messages for developers
 	Info  Level = 0   // messages for users
+	Warn  Level = 10  // warnings for users
+	Error Level = 20  // failures
 )
 
 // String returns the constant name of the level.
@@ -155,6 +157,10 @@ func (l Level) String() string {
 		return "Debug"
 	case Info:
 		return "Info"
+	case Warn:
+		return "Warn"
+	case Error:
+		return "Error"
 	}
 	var buf []byte
 	buf = append(buf, "Level("...)

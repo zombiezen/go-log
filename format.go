@@ -21,6 +21,16 @@ func Debugf(ctx context.Context, format string, args ...interface{}) {
 	logf(ctx, Default(), Debug, format, args)
 }
 
+// Warnf writes a warning message to the default Logger.  Its arguments are handled in the manner of fmt.Sprintf.
+func Warnf(ctx context.Context, format string, args ...interface{}) {
+	logf(ctx, Default(), Warn, format, args)
+}
+
+// Errorf writes an error message to the default Logger.  Its arguments are handled in the manner of fmt.Sprintf.
+func Errorf(ctx context.Context, format string, args ...interface{}) {
+	logf(ctx, Default(), Error, format, args)
+}
+
 // Logf writes a message to a Logger.  Its arguments are handled in the manner of fmt.Sprintf.
 func Logf(ctx context.Context, logger Logger, level Level, format string, args ...interface{}) {
 	logf(ctx, logger, level, format, args)

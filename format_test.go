@@ -13,8 +13,10 @@ import (
 
 func TestLogf(t *testing.T) {
 	tests := []Level{
-		Info,
 		Debug,
+		Info,
+		Warn,
+		Error,
 	}
 	const wantMsg = "Hello, World!"
 	for _, level := range tests {
