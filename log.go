@@ -11,12 +11,15 @@ import (
 	"time"
 )
 
-// Logger is the interface that wraps the Log method.
+// Logger is the interface that wraps the Log and LogEnabled methods.
+// Most people should use Debugf, Infof, Warnf, or Errorf instead of
+// interacting with a Logger directly.
 //
 // Log sends an Entry to the underlying log sink.  Each call will be sent
 // to the sink in the order that Log was called, but Log may not wait for
-// delivery to be acknowledged.  As such, Log should ignore any deadline
-// set on the Context.  Log must be safe to call from multiple goroutines.
+// delivery to be acknowledged.  Further, logs may be sent when a request
+// is being shut down.  As such, Log must ignore any deadline set on the
+// Context.  Log must be safe to call from multiple goroutines.
 //
 // LogEnabled returns false if Log will no-op for a particular Entry, which
 // may or may not have Msg filled in.
