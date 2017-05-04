@@ -13,17 +13,20 @@ import (
 // Flags define which text to prefix to each log entry in a Writer.
 type Flags uint
 
-// Defined flags.
+// Bits or'ed together to control what's printed.
+// There is no control over the order they appear (the order listed
+// here) or the format they present (as described in the comments).
+// The prefix is followed by a colon only when ShowFile, ShortFile, or ShowLevel
+// is specified.
+//
+// For example, flags ShowDate | ShowTime produce,
+//
+//	2009/01/23 01:23:23 message
+//
+// while flags ShowDate | ShowTime | Microseconds | ShowFile produce,
+//
+//	2009/01/23 01:23:23.123123 /a/b/c/d.go:23: message
 const (
-	// Bits or'ed together to control what's printed.
-	// There is no control over the order they appear (the order listed
-	// here) or the format they present (as described in the comments).
-	// The prefix is followed by a colon only when ShowFile, ShortFile, or ShowLevel
-	// is specified.
-	// For example, flags ShowDate | ShowTime produce,
-	//	2009/01/23 01:23:23 message
-	// while flags ShowDate | ShowTime | Microseconds | ShowFile produce,
-	//	2009/01/23 01:23:23.123123 /a/b/c/d.go:23: message
 	ShowDate     Flags = 1 << iota // the date in the local time zone: 2009/01/23
 	ShowTime                       // the time in the local time zone: 01:23:23
 	Microseconds                   // microsecond resolution: 01:23:23.123123.  assumes ShowTime.
