@@ -1,0 +1,8 @@
+language: go
+sudo: false
+go_import_path: zombiezen.com/go/log
+go:
+- 1.7.x
+- 1.x
+before_script:
+- go vet ./...
