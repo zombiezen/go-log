@@ -51,7 +51,7 @@ func (ent Entry) Append(buf []byte, flag int) []byte {
 	if file == "" {
 		file, line = "???", 0
 	}
-	buf = formatHeader(buf, flag, ent.Time, file, line)
+	buf = formatHeader(buf, flag, ent.Time, ent.Level, file, line)
 	s := ent.Msg
 	if n := len(s); n == 0 || s[n-1] == '\n' {
 		s = s[:n-1]
@@ -65,7 +65,7 @@ func (ent Entry) String() string {
 	return string(ent.Append(nil, LstdFlags))
 }
 
-func formatHeader(buf []byte, flag int, t time.Time, file string, line int) []byte {
+func formatHeader(buf []byte, flag int, t time.Time, level Level, file string, line int) []byte {
 	if flag&LUTC != 0 {
 		t = t.UTC()
 	}
@@ -93,7 +93,7 @@ func formatHeader(buf []byte, flag int, t time.Time, file string, line int) []by
 			buf = append(buf, ' ')
 		}
 	}
-	if flag&(Lshortfile|Llongfile) != 0 {
+	if flag&(Llevel|Lshortfile|Llongfile) != 0 {
 		if flag&Lshortfile != 0 {
 			short := file
 			for i := len(file) - 1; i > 0; i-- {
@@ -104,9 +104,20 @@ func formatHeader(buf []byte, flag int, t time.Time, file string, line int) []by
 			}
 			file = short
 		}
-		buf = append(buf, file...)
-		buf = append(buf, ':')
-		buf = itoa(buf, line, -1)
+		switch {
+		case flag&Llevel != 0 && flag&(Lshortfile|Llongfile) == 0:
+			buf = append(buf, entryLevel(level)...)
+		case flag&Llevel == 0 && flag&(Lshortfile|Llongfile) != 0:
+			buf = append(buf, file...)
+			buf = append(buf, ':')
+			buf = itoa(buf, line, -1)
+		default:
+			buf = append(buf, entryLevel(level)...)
+			buf = append(buf, ' ')
+			buf = append(buf, file...)
+			buf = append(buf, ':')
+			buf = itoa(buf, line, -1)
+		}
 		buf = append(buf, ": "...)
 	}
 	return buf
@@ -167,4 +178,19 @@ func (l Level) String() string {
 	buf = itoa(buf, int(l), -1)
 	buf = append(buf, ')')
 	return string(buf)
+}
+
+func entryLevel(l Level) string {
+	switch l {
+	case Debug:
+		return "DEBUG"
+	case Info:
+		return "INFO"
+	case Warn:
+		return "WARN"
+	case Error:
+		return "ERROR"
+	default:
+		return "???"
+	}
 }

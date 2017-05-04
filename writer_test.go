@@ -30,6 +30,54 @@ func TestWriter(t *testing.T) {
 			want: "Hello, World!\n",
 		},
 		{
+			name: "debug level",
+			flag: Llevel,
+			entry: Entry{
+				Msg:   "Hello, World!",
+				Level: Debug,
+				Time:  time.Date(2017, time.February, 17, 1, 2, 3, 456789000, time.UTC),
+				File:  "foo/bar.go",
+				Line:  278,
+			},
+			want: "DEBUG: Hello, World!\n",
+		},
+		{
+			name: "info level",
+			flag: Llevel,
+			entry: Entry{
+				Msg:   "Hello, World!",
+				Level: Info,
+				Time:  time.Date(2017, time.February, 17, 1, 2, 3, 456789000, time.UTC),
+				File:  "foo/bar.go",
+				Line:  278,
+			},
+			want: "INFO: Hello, World!\n",
+		},
+		{
+			name: "warn level",
+			flag: Llevel,
+			entry: Entry{
+				Msg:   "Hello, World!",
+				Level: Warn,
+				Time:  time.Date(2017, time.February, 17, 1, 2, 3, 456789000, time.UTC),
+				File:  "foo/bar.go",
+				Line:  278,
+			},
+			want: "WARN: Hello, World!\n",
+		},
+		{
+			name: "error level",
+			flag: Llevel,
+			entry: Entry{
+				Msg:   "Hello, World!",
+				Level: Error,
+				Time:  time.Date(2017, time.February, 17, 1, 2, 3, 456789000, time.UTC),
+				File:  "foo/bar.go",
+				Line:  278,
+			},
+			want: "ERROR: Hello, World!\n",
+		},
+		{
 			name:   "prefix no-header",
 			prefix: "///prefix|||",
 			entry: Entry{
@@ -62,15 +110,40 @@ func TestWriter(t *testing.T) {
 			want: "2017/02/17 01:02:03.456789 bar.go:278: Hello, World!\n",
 		},
 		{
-			name: "all flags",
-			flag: Ldate | Ltime | Lmicroseconds | Llongfile,
+			name: "time flags",
+			flag: Ldate | Ltime | Lmicroseconds,
 			entry: Entry{
-				Msg:  "Hello, World!\n",
-				Time: time.Date(2017, time.February, 17, 1, 2, 3, 456789000, time.UTC),
-				File: "foo/bar.go",
-				Line: 278,
+				Msg:   "Hello, World!\n",
+				Level: Warn,
+				Time:  time.Date(2017, time.February, 17, 1, 2, 3, 456789000, time.UTC),
+				File:  "foo/bar.go",
+				Line:  278,
 			},
-			want: "2017/02/17 01:02:03.456789 foo/bar.go:278: Hello, World!\n",
+			want: "2017/02/17 01:02:03.456789 Hello, World!\n",
+		},
+		{
+			name: "all flags",
+			flag: Ldate | Ltime | Lmicroseconds | Llongfile | Llevel,
+			entry: Entry{
+				Msg:   "Hello, World!\n",
+				Level: Warn,
+				Time:  time.Date(2017, time.February, 17, 1, 2, 3, 456789000, time.UTC),
+				File:  "foo/bar.go",
+				Line:  278,
+			},
+			want: "2017/02/17 01:02:03.456789 WARN foo/bar.go:278: Hello, World!\n",
+		},
+		{
+			name: "all flags debug",
+			flag: Ldate | Ltime | Lmicroseconds | Llongfile | Llevel,
+			entry: Entry{
+				Msg:   "Hello, World!\n",
+				Level: Debug,
+				Time:  time.Date(2017, time.February, 17, 1, 2, 3, 456789000, time.UTC),
+				File:  "foo/bar.go",
+				Line:  278,
+			},
+			want: "2017/02/17 01:02:03.456789 DEBUG foo/bar.go:278: Hello, World!\n",
 		},
 	}
 	ctx := context.Background()
