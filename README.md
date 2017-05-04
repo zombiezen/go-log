@@ -12,6 +12,8 @@ I don't consider the API stable at the moment; I still want some time for this
 API to bake.  I will be following [SemVer][] tags, but in v0: pin to specific
 revisions for the time being.
 
+This is not an official Google or Go project.
+
 [godoc.org]: https://godoc.org/zombiezen.com/go/log
 [travis]: https://travis-ci.org/zombiezen/go-log
 [DESIGN.md]: https://github.com/zombiezen/go-log/blob/master/DESIGN.md
@@ -20,7 +22,7 @@ revisions for the time being.
 ## Install
 
 ```bash
-go get -u zombiezen.com/go/log
+go get -u zombiezen.com/go/log/...
 ```
 
 ## Documentation
