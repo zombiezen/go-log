@@ -46,7 +46,7 @@ type Entry struct {
 // flag controls the formatting of the entry.
 // Even if ent.Msg ends in a newline, the last byte appended to buf will
 // never be a newline.
-func (ent Entry) Append(buf []byte, flag int) []byte {
+func (ent Entry) Append(buf []byte, flag Flags) []byte {
 	file, line := ent.File, ent.Line
 	if file == "" {
 		file, line = "???", 0
@@ -62,15 +62,15 @@ func (ent Entry) Append(buf []byte, flag int) []byte {
 
 // String returns a formatted entry string with the default options.
 func (ent Entry) String() string {
-	return string(ent.Append(nil, LstdFlags))
+	return string(ent.Append(nil, StdFlags))
 }
 
-func formatHeader(buf []byte, flag int, t time.Time, level Level, file string, line int) []byte {
-	if flag&LUTC != 0 {
+func formatHeader(buf []byte, flag Flags, t time.Time, level Level, file string, line int) []byte {
+	if flag&UTC != 0 {
 		t = t.UTC()
 	}
-	if flag&(Ldate|Ltime|Lmicroseconds) != 0 {
-		if flag&Ldate != 0 {
+	if flag&(ShowDate|ShowTime|Microseconds) != 0 {
+		if flag&ShowDate != 0 {
 			year, month, day := t.Date()
 			buf = itoa(buf, year, 4)
 			buf = append(buf, '/')
@@ -79,22 +79,22 @@ func formatHeader(buf []byte, flag int, t time.Time, level Level, file string, l
 			buf = itoa(buf, day, 2)
 			buf = append(buf, ' ')
 		}
-		if flag&(Ltime|Lmicroseconds) != 0 {
+		if flag&(ShowTime|Microseconds) != 0 {
 			hour, min, sec := t.Clock()
 			buf = itoa(buf, hour, 2)
 			buf = append(buf, ':')
 			buf = itoa(buf, min, 2)
 			buf = append(buf, ':')
 			buf = itoa(buf, sec, 2)
-			if flag&Lmicroseconds != 0 {
+			if flag&Microseconds != 0 {
 				buf = append(buf, '.')
 				buf = itoa(buf, t.Nanosecond()/1e3, 6)
 			}
 			buf = append(buf, ' ')
 		}
 	}
-	if flag&(Llevel|Lshortfile|Llongfile) != 0 {
-		if flag&Lshortfile != 0 {
+	if flag&(ShowLevel|ShortFile|ShowFile) != 0 {
+		if flag&ShortFile != 0 {
 			short := file
 			for i := len(file) - 1; i > 0; i-- {
 				if file[i] == '/' {
@@ -105,9 +105,9 @@ func formatHeader(buf []byte, flag int, t time.Time, level Level, file string, l
 			file = short
 		}
 		switch {
-		case flag&Llevel != 0 && flag&(Lshortfile|Llongfile) == 0:
+		case flag&ShowLevel != 0 && flag&(ShortFile|ShowFile) == 0:
 			buf = append(buf, entryLevel(level)...)
-		case flag&Llevel == 0 && flag&(Lshortfile|Llongfile) != 0:
+		case flag&ShowLevel == 0 && flag&(ShortFile|ShowFile) != 0:
 			buf = append(buf, file...)
 			buf = append(buf, ':')
 			buf = itoa(buf, line, -1)

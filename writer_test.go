@@ -15,7 +15,7 @@ func TestWriter(t *testing.T) {
 	tests := []struct {
 		name   string
 		prefix string
-		flag   int
+		flag   Flags
 		entry  Entry
 		want   string
 	}{
@@ -31,7 +31,7 @@ func TestWriter(t *testing.T) {
 		},
 		{
 			name: "debug level",
-			flag: Llevel,
+			flag: ShowLevel,
 			entry: Entry{
 				Msg:   "Hello, World!",
 				Level: Debug,
@@ -43,7 +43,7 @@ func TestWriter(t *testing.T) {
 		},
 		{
 			name: "info level",
-			flag: Llevel,
+			flag: ShowLevel,
 			entry: Entry{
 				Msg:   "Hello, World!",
 				Level: Info,
@@ -55,7 +55,7 @@ func TestWriter(t *testing.T) {
 		},
 		{
 			name: "warn level",
-			flag: Llevel,
+			flag: ShowLevel,
 			entry: Entry{
 				Msg:   "Hello, World!",
 				Level: Warn,
@@ -67,7 +67,7 @@ func TestWriter(t *testing.T) {
 		},
 		{
 			name: "error level",
-			flag: Llevel,
+			flag: ShowLevel,
 			entry: Entry{
 				Msg:   "Hello, World!",
 				Level: Error,
@@ -100,7 +100,7 @@ func TestWriter(t *testing.T) {
 		},
 		{
 			name: "short file",
-			flag: Ldate | Ltime | Lmicroseconds | Lshortfile,
+			flag: ShowDate | ShowTime | Microseconds | ShortFile,
 			entry: Entry{
 				Msg:  "Hello, World!\n",
 				Time: time.Date(2017, time.February, 17, 1, 2, 3, 456789000, time.UTC),
@@ -111,7 +111,7 @@ func TestWriter(t *testing.T) {
 		},
 		{
 			name: "time flags",
-			flag: Ldate | Ltime | Lmicroseconds,
+			flag: ShowDate | ShowTime | Microseconds,
 			entry: Entry{
 				Msg:   "Hello, World!\n",
 				Level: Warn,
@@ -123,7 +123,7 @@ func TestWriter(t *testing.T) {
 		},
 		{
 			name: "all flags",
-			flag: Ldate | Ltime | Lmicroseconds | Llongfile | Llevel,
+			flag: ShowDate | ShowTime | Microseconds | ShowFile | ShowLevel,
 			entry: Entry{
 				Msg:   "Hello, World!\n",
 				Level: Warn,
@@ -135,7 +135,7 @@ func TestWriter(t *testing.T) {
 		},
 		{
 			name: "all flags debug",
-			flag: Ldate | Ltime | Lmicroseconds | Llongfile | Llevel,
+			flag: ShowDate | ShowTime | Microseconds | ShowFile | ShowLevel,
 			entry: Entry{
 				Msg:   "Hello, World!\n",
 				Level: Debug,
@@ -162,7 +162,7 @@ func TestWriter(t *testing.T) {
 func BenchmarkWriter(b *testing.B) {
 	ctx := context.Background()
 	buf := new(bytes.Buffer)
-	logger := New(buf, "", LstdFlags, nil)
+	logger := New(buf, "", StdFlags, nil)
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
 		buf.Reset()

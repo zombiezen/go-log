@@ -15,7 +15,7 @@ var (
 	defaultLogger    atomicLogger
 	setDefaultLogger sync.Once
 
-	fallback = New(os.Stderr, "", LstdFlags, nil)
+	fallback = New(os.Stderr, "", StdFlags, nil)
 )
 
 // Default returns the global logger.
