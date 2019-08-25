@@ -16,8 +16,8 @@ import (
 func Example() {
 	// Initialize the global logger.
 	// This should only happen in main and before any log statements.
-	stderrLog := log.New(os.Stdout, "", 0, nil)
-	log.SetDefault(stderrLog)
+	stdoutLog := log.New(os.Stdout, "", 0, nil)
+	log.SetDefault(stdoutLog)
 
 	// Once the logger is set, you can log from anywhere.
 	ctx := context.Background()
