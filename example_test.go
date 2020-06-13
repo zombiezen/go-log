@@ -1,6 +1,8 @@
-// Copyright 2017 The Go Authors. All rights reserved.
+// Copyright 2017 The Zombie Zen Log Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
+//
+// SPDX-License-Identifier: BSD-3-Clause
 
 // Sample application to demonstrate the log package.
 

@@ -1,0 +1,13 @@
+{
+	"Copyright": {
+		"prefix": "copyright",
+		"body": [
+      "$LINE_COMMENT Copyright $CURRENT_YEAR The Zombie Zen Log Authors. All rights reserved.",
+      "$LINE_COMMENT Use of this source code is governed by a BSD-style",
+			"$LINE_COMMENT license that can be found in the LICENSE file.",
+			"$LINE_COMMENT",
+			"$LINE_COMMENT SPDX-License-Identifier: BSD-3-Clause"
+		],
+		"description": "BSD license header"
+	}
+}

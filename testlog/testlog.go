@@ -1,6 +1,8 @@
-// Copyright 2017 The Go Authors. All rights reserved.
+// Copyright 2017 The Zombie Zen Log Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
+//
+// SPDX-License-Identifier: BSD-3-Clause
 
 // Package testlog provides a Logger that writes to a *testing.T or *testing.B.
 // See the examples for how to set this up.
