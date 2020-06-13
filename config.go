@@ -17,12 +17,14 @@ var (
 	defaultLogger    atomicLogger
 	setDefaultLogger sync.Once
 
-	fallback = New(os.Stderr, "", StdFlags, nil)
+	fallback = &LevelFilter{
+		Min:    Info,
+		Output: New(os.Stderr, "", StdFlags, nil),
+	}
 )
 
-// Default returns the global logger.
-// Until SetDefault is called, the returned Logger will send all
-// entries to stderr.
+// Default returns the global logger. Until SetDefault is called, the returned
+// Logger will send all entries with a level of at least Info to stderr.
 func Default() Logger {
 	return &defaultLogger
 }
@@ -35,8 +37,11 @@ func SetDefault(l Logger) {
 			panic("log.SetDefaultLogger(nil)")
 		}
 		defaultLogger.out.Store(l)
+		fallback = nil // allow garbage collection
 		ok = true
 	})
+	// Panic outside the sync.Once so as not to block future critical regions in
+	// case the application catches panics (not recommended).
 	if !ok {
 		panic("log.SetDefaultLogger called more than once")
 	}
