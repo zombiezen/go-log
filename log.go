@@ -23,8 +23,9 @@ import (
 // is being shut down.  As such, Log must ignore any deadline set on the
 // Context.  Log must be safe to call from multiple goroutines.
 //
-// LogEnabled returns false if Log will no-op for a particular Entry, which
-// may or may not have Msg filled in.
+// LogEnabled returns false if Log will no-op for a particular Entry, which may
+// or may not have Msg filled in. LogEnabled must be safe to call from multiple
+// goroutines.
 type Logger interface {
 	Log(context.Context, Entry)
 	LogEnabled(Entry) bool
