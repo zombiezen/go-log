@@ -48,10 +48,8 @@ type Entry struct {
 	Line int
 }
 
-// Append appends a formatted entry to a buffer.
-// flag controls the formatting of the entry.
-// Even if ent.Msg ends in a newline, the last byte appended to buf will
-// never be a newline.
+// Append appends a formatted entry to a buffer. flag controls the formatting of
+// the entry. A trailing newline in ent.Msg will be trimmed.
 func (ent Entry) Append(buf []byte, flag Flags) []byte {
 	file, line := ent.File, ent.Line
 	if file == "" {
