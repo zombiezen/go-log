@@ -7,7 +7,7 @@ projects.  If others find it helpful, then I'm happy.
 
 This is not an official Google or Go project.
 
-[DESIGN.md]: https://github.com/zombiezen/go-log/blob/master/DESIGN.md
+[DESIGN.md]: https://github.com/zombiezen/go-log/blob/main/DESIGN.md
 
 ## Install
 
@@ -21,4 +21,4 @@ Docs on [pkg.go.dev](https://pkg.go.dev/zombiezen.com/go/log?tab=doc).
 
 ## License
 
-BSD - see [LICENSE](https://github.com/zombiezen/go-log/blob/master/LICENSE).
+BSD - see [LICENSE](https://github.com/zombiezen/go-log/blob/main/LICENSE).
