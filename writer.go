@@ -9,6 +9,7 @@ package log
 import (
 	"context"
 	"io"
+	"strings"
 	"sync"
 )
 
@@ -48,53 +49,42 @@ func (f Flags) String() string {
 	if f == 0 {
 		return "0"
 	}
-	var buf []byte
+	buf := new(strings.Builder)
 	if f&ShowDate != 0 {
-		buf = append(buf, "ShowDate"...)
+		appendOredFlag(buf, "ShowDate")
 	}
 	if f&ShowTime != 0 {
-		if len(buf) > 0 {
-			buf = append(buf, '|')
-		}
-		buf = append(buf, "ShowTime"...)
+		appendOredFlag(buf, "ShowTime")
 	}
 	if f&Microseconds != 0 {
-		if len(buf) > 0 {
-			buf = append(buf, '|')
-		}
-		buf = append(buf, "ShowMicroseconds"...)
+		appendOredFlag(buf, "Microseconds")
 	}
 	if f&ShowFile != 0 {
-		if len(buf) > 0 {
-			buf = append(buf, '|')
-		}
-		buf = append(buf, "ShowFile"...)
+		appendOredFlag(buf, "ShowFile")
 	}
 	if f&ShortFile != 0 {
-		if len(buf) > 0 {
-			buf = append(buf, '|')
-		}
-		buf = append(buf, "ShortFile"...)
+		appendOredFlag(buf, "ShortFile")
 	}
 	if f&UTC != 0 {
-		if len(buf) > 0 {
-			buf = append(buf, '|')
-		}
-		buf = append(buf, "UTC"...)
+		appendOredFlag(buf, "UTC")
 	}
 	if f&ShowLevel != 0 {
-		if len(buf) > 0 {
-			buf = append(buf, '|')
-		}
-		buf = append(buf, "ShowLevel"...)
+		appendOredFlag(buf, "ShowLevel")
 	}
-	if others := f & allFlags; others != 0 {
-		if len(buf) > 0 {
-			buf = append(buf, '|')
+	if others := f &^ allFlags; others != 0 {
+		if buf.Len() > 0 {
+			buf.WriteByte('|')
 		}
-		buf = itoa(buf, int(others), -1)
+		buf.Write(itoa(nil, int(others), -1))
 	}
-	return string(buf)
+	return buf.String()
+}
+
+func appendOredFlag(sb *strings.Builder, name string) {
+	if sb.Len() > 0 {
+		sb.WriteByte('|')
+	}
+	sb.WriteString(name)
 }
 
 // A Writer implements Logger by writing lines of output to an io.Writer.

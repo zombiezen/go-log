@@ -9,8 +9,12 @@ package log
 import (
 	"bytes"
 	"context"
+	"strings"
 	"testing"
 	"time"
+
+	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
 func TestWriter(t *testing.T) {
@@ -158,6 +162,43 @@ func TestWriter(t *testing.T) {
 				t.Errorf("log output = %q; want %q", s, test.want)
 			}
 		})
+	}
+}
+
+func TestFlagString(t *testing.T) {
+	tests := []struct {
+		f    Flags
+		want []string
+	}{
+		{
+			f:    0,
+			want: []string{"0"},
+		},
+		{
+			f:    ShowDate,
+			want: []string{"ShowDate"},
+		},
+		{
+			f:    ShowDate | ShowTime,
+			want: []string{"ShowDate", "ShowTime"},
+		},
+		{
+			f:    ShowDate | ShowTime | Microseconds | ShowFile | ShortFile | UTC | ShowLevel,
+			want: []string{"ShowDate", "ShowTime", "Microseconds", "ShowFile", "ShortFile", "UTC", "ShowLevel"},
+		},
+		{
+			f:    ShowDate | 1<<31,
+			want: []string{"ShowDate", "2147483648"},
+		},
+	}
+	stringLess := func(s1, s2 string) bool {
+		return s1 < s2
+	}
+	for _, test := range tests {
+		got := test.f.String()
+		if !cmp.Equal(strings.Split(got, "|"), test.want, cmpopts.SortSlices(stringLess)) {
+			t.Errorf("Flags(%#x).String() = %q; want %q", uint(test.f), got, strings.Join(test.want, "|"))
+		}
 	}
 }
 
