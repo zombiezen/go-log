@@ -28,3 +28,16 @@ func Example() {
 	// Output:
 	// Hello, World!
 }
+
+// TODO(someday): ExampleLevelFilter should be an output test, but SetDefault
+// can only be called once.
+
+func ExampleLevelFilter() {
+	log.SetDefault(&log.LevelFilter{
+		Min:    log.Warn, // Only show warnings or above
+		Output: log.New(os.Stdout, "", 0, nil),
+	})
+	ctx := context.Background()
+	log.Infof(ctx, "This won't show up.")
+	log.Warnf(ctx, "Only Warn or higher will show up.")
+}
