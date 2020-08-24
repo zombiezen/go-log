@@ -37,7 +37,6 @@ func SetDefault(l Logger) {
 			panic("log.SetDefaultLogger(nil)")
 		}
 		defaultLogger.out.Store(l)
-		fallback = nil // allow garbage collection
 		ok = true
 	})
 	// Panic outside the sync.Once so as not to block future critical regions in
