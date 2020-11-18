@@ -57,7 +57,7 @@ func (ent Entry) Append(buf []byte, flag Flags) []byte {
 	}
 	buf = formatHeader(buf, flag, ent.Time, ent.Level, file, line)
 	s := ent.Msg
-	if n := len(s); n == 0 || s[n-1] == '\n' {
+	if n := len(s); n > 0 && s[n-1] == '\n' {
 		s = s[:n-1]
 	}
 	buf = append(buf, s...)

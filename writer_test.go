@@ -36,6 +36,16 @@ func TestWriter(t *testing.T) {
 			want: "Hello, World!\n",
 		},
 		{
+			name: "basic no-header empty",
+			entry: Entry{
+				Msg:  "",
+				Time: time.Date(2017, time.February, 17, 1, 2, 3, 456789000, time.UTC),
+				File: "foo/bar.go",
+				Line: 278,
+			},
+			want: "\n",
+		},
+		{
 			name: "debug level",
 			flag: ShowLevel,
 			entry: Entry{
