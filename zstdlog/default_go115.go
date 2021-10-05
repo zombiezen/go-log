@@ -10,7 +10,6 @@
 package zstdlog
 
 import (
-	"context"
 	stdlog "log"
 
 	"zombiezen.com/go/log"
@@ -18,5 +17,6 @@ import (
 
 func setDefaultOutput(dst log.Logger, opts *Options) {
 	stdlog.SetFlags(stdlogFlags)
+	stdlog.SetPrefix("")
 	stdlog.SetOutput(newWriter(dst, opts))
 }
