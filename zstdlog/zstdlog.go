@@ -104,6 +104,10 @@ func (w *writer) Write(p []byte) (int, error) {
 			return 0, fmt.Errorf("log entry %q: invalid format: %v", p, err)
 		}
 	}
+	if ent.File == "???" {
+		ent.File = ""
+		ent.Line = 0
+	}
 
 	ent.Level = w.level
 	ent.Msg = strings.TrimSuffix(ps[fileLineEnd+len(msgSeparator):], "\n")
