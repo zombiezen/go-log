@@ -122,3 +122,23 @@ func (cl *captureLogger) Log(ctx context.Context, e log.Entry) {
 func (cl *captureLogger) LogEnabled(log.Entry) bool {
 	return true
 }
+
+func BenchmarkPrintf(b *testing.B) {
+	stdLogger := New(new(captureLogger), nil)
+	b.ResetTimer()
+
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		stdLogger.Printf("Hello World")
+	}
+}
+
+func BenchmarkDiscard(b *testing.B) {
+	stdLogger := New(log.Discard, nil)
+	b.ResetTimer()
+
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		stdLogger.Printf("Hello World")
+	}
+}
