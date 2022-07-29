@@ -73,3 +73,13 @@ func logf(ctx context.Context, logger Logger, level Level, format string, args [
 	}
 	logger.Log(ctx, ent)
 }
+
+// IsEnabled reports false if the default logger will no-op for logs at the given level.
+func IsEnabled(level Level) bool {
+	ent := Entry{Time: time.Now(), Level: level}
+	if _, file, line, ok := runtime.Caller(1); ok {
+		ent.File = file
+		ent.Line = line
+	}
+	return Default().LogEnabled(ent)
+}
